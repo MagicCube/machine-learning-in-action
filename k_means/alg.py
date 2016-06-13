@@ -1,7 +1,7 @@
 import decimal
 import numpy as np
 
-def k_means(dataset, k = 3):
+def k_means(k, dataset):
     print("Analyzing dataset...")
     count, dim = dataset.shape
     print("Record count: %d\nDim: %d" % (count, dim))
@@ -37,7 +37,7 @@ def _cluster(dataset, centroids):
 
 
 def _calculate_distance(centroids, point):
-    return np.sum((centroids - point) ** 2, axis=-1)
+    return np.sqrt(np.sum((centroids - point) ** 2, axis=-1))
 
 
 def _get_centroids(clusters):

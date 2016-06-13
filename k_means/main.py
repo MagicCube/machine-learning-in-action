@@ -10,7 +10,7 @@ def main():
     img = load_img("%s/%s" % (os.path.abspath(os.path.dirname(__file__)), "data/test.png"))
     dataset = extract_rgb_dataset(img)
     print("\n**** Beginning of K-Means ****")
-    clusters = k_means(dataset, 5)
+    clusters = k_means(5, dataset)
     colors = [ "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#e377c2" ]
     markers = [ 'o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd' ]
     for i, cluster in enumerate(clusters):
