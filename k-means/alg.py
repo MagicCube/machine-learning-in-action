@@ -17,6 +17,7 @@ def k_means(dataset, k = 3):
         if changed:
             centroids = new_centroids
             clusters = _cluster(dataset, centroids)
+            print([ len(cluster) for cluster in clusters ])
 
     return clusters
 
@@ -26,18 +27,25 @@ def _cluster(dataset, centroids):
     for i in range(len(centroids)):
         clusters.append([])
     for point in dataset:
-        distance2 = np.sum((centroids - point) ** 2, -1)
-        cluster = clusters[distance2.argmin()]
+        distance = _calculate_distance(centroids, point);
+        cluster = clusters[distance.argmin()]
         cluster.append(list(point))
     for i in range(len(centroids)):
         clusters[i] = np.array(clusters[i])
     return np.array(clusters)
 
 
+def _calculate_distance(centroids, point):
+    return np.sum((centroids - point) ** 2, axis=-1)
+
+
 def _get_centroids(clusters):
     centroids = []
+    dim = len(clusters[0][0])
     for cluster in clusters:
-        centroid = (np.mean(cluster[:, 0]), np.mean(cluster[:, 1]))
+        centroid = []
+        for d in range(dim):
+            centroid.append(np.mean(cluster[:, d]))
         centroids.append(centroid)
     return np.array(centroids)
 

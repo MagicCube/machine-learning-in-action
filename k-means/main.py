@@ -8,12 +8,13 @@ from alg import k_means
 
 def main():
     img = load_img("%s/%s" % (os.path.abspath(os.path.dirname(__file__)), "data/test.png"))
-    dataset = extract_gray_scaled_dataset(img)
+    dataset = extract_rgb_dataset(img)
     print("\n**** Beginning of K-Means ****")
-    clusters = k_means(dataset)
-    colors = [ "#ff0000", "#00ff00", "#0000ff" ]
+    clusters = k_means(dataset, 5)
+    colors = [ "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#e377c2" ]
+    markers = [ 'o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd' ]
     for i, cluster in enumerate(clusters):
-        plt.scatter(cluster[:, 0], cluster[:, 1], c = colors[i], s = 10)
+        plt.scatter(cluster[:, 0], cluster[:, 1], s=15, c=colors[i], marker = markers[i])
     plt.show()
     print("******* End of K-Means *******")
 
@@ -26,6 +27,19 @@ def extract_gray_scaled_dataset(img):
         for x in range(row.shape[0]):
             if row[x] != 255:
                 points.append((x, y))
+    print("%d points were extracted from the image." % len(points))
+    return np.array(points)
+
+def extract_rgb_dataset(img):
+    print("Extracting points...")
+    points = [];
+    height, width, color_depth = img.shape
+    for y in range(height):
+        row = img[y]
+        for x in range(width):
+            color = row[x];
+            if not np.array_equal(color, [255, 255, 255]):
+                points.append((x / width, y / height, color[0] / 255, color[1] / 255, color[2] / 255))
     print("%d points were extracted from the image." % len(points))
     return np.array(points)
 
