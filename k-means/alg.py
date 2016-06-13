@@ -1,3 +1,4 @@
+import decimal
 import numpy as np
 
 def k_means(dataset, k = 3):
@@ -10,15 +11,15 @@ def k_means(dataset, k = 3):
     clusters = _cluster(dataset, centroids)
 
     changed = True
+    iteration = 0
     while changed:
-        new_centroids = _get_centroids(clusters)
-        print("Start new iteration by using centroids\n%s" % new_centroids)
-        changed = not np.array_equal(new_centroids, centroids)
+        centroids = _get_centroids(clusters)
+        iteration += 1
+        print("Start #%d iteration by using centroids\n%s" % (iteration, centroids))
+        new_clusters = _cluster(dataset, centroids)
+        changed = not _clusters_equal(clusters, new_clusters)
         if changed:
-            centroids = new_centroids
-            clusters = _cluster(dataset, centroids)
-            print([ len(cluster) for cluster in clusters ])
-
+            clusters = new_clusters
     return clusters
 
 
@@ -29,10 +30,10 @@ def _cluster(dataset, centroids):
     for point in dataset:
         distance = _calculate_distance(centroids, point);
         cluster = clusters[distance.argmin()]
-        cluster.append(list(point))
-    for i in range(len(centroids)):
-        clusters[i] = np.array(clusters[i])
-    return np.array(clusters)
+        cluster.append(point)
+    for i, cluster in enumerate(clusters):
+        clusters[i] = np.array(cluster)
+    return clusters
 
 
 def _calculate_distance(centroids, point):
@@ -41,9 +42,11 @@ def _calculate_distance(centroids, point):
 
 def _get_centroids(clusters):
     centroids = []
-    dim = len(clusters[0][0])
+    dim = 0
     for cluster in clusters:
         centroid = []
+        if (dim == 0 and len(cluster) > 0):
+            dim = cluster[0].shape[0]
         for d in range(dim):
             centroid.append(np.mean(cluster[:, d]))
         centroids.append(centroid)
@@ -52,7 +55,15 @@ def _get_centroids(clusters):
 
 def _select_random_centroids(dataset, k):
     centroids = []
+    count = len(dataset)
     for i in range(k):
-        index = int(np.random.uniform(0, len(dataset)))
+        index = int(np.random.uniform(0, count))
         centroids.append(dataset[index])
     return np.array(centroids)
+
+def _clusters_equal(a, b):
+    for i, cluster in enumerate(a):
+        equal = np.array_equal(cluster, b[i])
+        if not equal:
+            return False
+    return True

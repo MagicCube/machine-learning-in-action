@@ -14,7 +14,8 @@ def main():
     colors = [ "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#e377c2" ]
     markers = [ 'o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd' ]
     for i, cluster in enumerate(clusters):
-        plt.scatter(cluster[:, 0], cluster[:, 1], s=15, c=colors[i], marker = markers[i])
+        print("#%d: %d" % (i, len(cluster)))
+        plt.scatter(cluster[:, 0], cluster[:, 1] * -1, s=15, c=colors[i], marker = markers[i])
     plt.show()
     print("******* End of K-Means *******")
 
