@@ -1,76 +1,45 @@
-import os
-import re
-
 import numpy as np
 
-from alg import naive_bayes
+from mail import *
+from model import *
 
 def main():
-    dataset, labels, dict = load_dataset("%s/%s" % (os.path.abspath(os.path.dirname(__file__)), "data/post.txt"))
-
-    text = "Stop posting stupid worthless garbage!"
-    print(text)
-    result = naive_bayes(convert_to_vector(text, dict), dataset, labels)
-    print("Banned: ", result)
-
-    print()
-
-    text = "Mr Licks ate my steak, How to stop him!"
-    print(text)
-    result = naive_bayes(convert_to_vector(text, dict), dataset, labels)
-    print("Banned: ", result)
+    # Loading all samples
+    samples = __load_samples()
+    # Split them into training and validation samples
+    training_samples, validation_samples = __split_samples(samples, 5, 21)
+    # Training
+    model = NaiveBayesModel()
+    model.train(training_samples)
+    pass
 
 
-def load_dataset(filename):
-    posts, labels, dict = load_posts(filename)
-    dataset = []
-    for post in posts:
-        vector = []
-        dataset.append(vector)
-        for word in dict:
-            if word in post:
-                vector.append(1)
-            else:
-                vector.append(0)
-    return (
-        np.array(dataset),
-        labels,
-        dict
-    )
+def __load_samples():
+    ham_mails = []
+    spam_mails = []
+    for i in range(25):
+        mail = Mail.load_from_file("data/ham/%d.txt" % (i + 1))
+        ham_mails.append(mail)
+        mail = Mail.load_from_file("data/spam/%d.txt" % (i + 1))
+        spam_mails.append(mail)
+    return (spam_mails, ham_mails)
 
 
-def convert_to_vector(text, dict):
-    reg_exp = re.compile(r'(\w+)')
-    post = list(map(lambda word: word.lower(), reg_exp.findall(text)))
-    vector = []
-    for word in dict:
-        if word in post:
-            vector.append(1)
-        else:
-            vector.append(0)
-    return vector
-
-
-def load_posts(filename):
-    reg_exp = re.compile(r'(\w+)')
-    posts = []
-    labels = []
-    dict = set()
-    with open(filename) as f:
-        lines = f.readlines()
-        for line in lines:
-            line = line.strip()
-            label = int(line[0] == "-")
-            text = line[2:]
-            words = list(map(lambda word: word.lower(), reg_exp.findall(text)))
-            dict = dict.union(words)
-            posts.append(words)
-            labels.append(label)
-    return (
-        posts,
-        np.array(labels),
-        list(dict)
-    )
+def __split_samples(samples, training_spam_count, tranining_ham_count):
+    spam_mails, ham_mails = samples
+    training_samples = ([], [])
+    for i in range(training_spam_count):
+        index = int(np.random.uniform(0, len(spam_mails)))
+        mail = spam_mails[index]
+        training_samples[0].append(mail)
+        spam_mails.remove(mail)
+    for i in range(tranining_ham_count):
+        index = int(np.random.uniform(0, len(ham_mails)))
+        mail = ham_mails[index]
+        training_samples[1].append(mail)
+        ham_mails.remove(mail)
+    validation_samples = (spam_mails, ham_mails)
+    return (training_samples, validation_samples)
 
 if __name__ == "__main__":
     main()
