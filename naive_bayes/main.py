@@ -11,7 +11,7 @@ def main():
 
 def train_test_and_save(samples):
     # Split them into training and validation samples
-    training_samples, validation_samples = __split_samples(samples, 10, 10)
+    training_samples, validation_samples = __split_samples(samples, 15, 15)
     # Test model
     model = NaiveBayesModel()
     model.train(training_samples)
