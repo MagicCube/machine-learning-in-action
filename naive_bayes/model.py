@@ -1,3 +1,5 @@
+import pickle
+
 import numpy as np
 
 class NaiveBayesModel:
@@ -58,6 +60,17 @@ class NaiveBayesModel:
         # Train
         self.__train(spam_mails, ham_mails)
 
+
+
+    def save(self):
+        with open("model.dmp", "wb") as fw:
+            pickle.dump(self, fw)
+
+
+    @staticmethod
+    def load():
+        with open("model.dmp", "rb") as fr:
+            return pickle.load(fr)
 
 
     def is_spam(self, mail):
