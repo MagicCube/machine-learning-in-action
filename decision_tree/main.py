@@ -1,11 +1,16 @@
 import os
 
 import numpy as np
-from alg import create_decition_tree
+from alg import *
 
 def main():
     dataset = load_dataset("%s/%s" % (os.path.abspath(os.path.dirname(__file__)), "data/golf.txt"))
     tree = create_decition_tree(dataset)
+    print(tree)
+    result = classify(("Rain", "Mild", "High", "Weak"), tree)
+    print(result)
+    result = classify(("Sunny", "Norm", "High", "Strong"), tree)
+    print(result) # Overfitting occurs
 
 def load_dataset(filename):
     dataset = []
