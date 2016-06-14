@@ -66,8 +66,8 @@ class NaiveBayesModel:
         p_ham = 1
         for i, value in enumerate(vector):
             if value > 0:
-                p_spam *= self.spam_word_probabilities[i]
-                p_ham *= self.ham_word_probabilities[i]
+                p_spam *= self.spam_word_probabilities[i] * (value / len(vector))
+                p_ham *= self.ham_word_probabilities[i] * (value / len(vector))
         return p_spam * self.spam_probability > p_ham * self.ham_probability
 
 

@@ -7,7 +7,7 @@ def main():
     # Load all samples
     samples = __load_samples()
     # Split them into training and validation samples
-    training_samples, validation_samples = __split_samples(samples, 18, 18)
+    training_samples, validation_samples = __split_samples(samples, 20, 20)
     # Training
     model = NaiveBayesModel()
     model.train(training_samples)
@@ -22,7 +22,7 @@ def main():
         if spam:
             error_count += 1
     validation_count = (len(validation_samples[0]) + len(validation_samples[1]))
-    print("Error rate:%d%%, %d out of %d" % (error_count / validation_count * 10, error_count, validation_count))
+    print("Error rate: %d%%, %d out of %d" % (error_count / validation_count * 100, error_count, validation_count))
 
 
 def __load_samples():
