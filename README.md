@@ -1,6 +1,9 @@
 # machine-learning-in-action
 Machine Learning in Action (机器学习实战)
 
+In this repository, it contains my personal implementations of several useful
+and the most commonly used algorithms which are introduced in the MLiA book.
+
 ## Installation
 The development environment requires numeric and scientific libraries like `numpy`,
 `matplotlib`, `scipy`, etc.
