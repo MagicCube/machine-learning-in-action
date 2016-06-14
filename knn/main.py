@@ -19,8 +19,8 @@ def main():
         label = knn(K, training_dataset, training_labels, validation_data)
         if label != validation_labels[i]:
             error_count += 1
-    error_rate = error_count / dataset.shape[0];
-    print("Error rate %f%%" % (error_rate * 100))
+    error_rate = error_count / validation_dataset.shape[0];
+    print("Errors %d / %d\nError rate: %f%%" % (error_count, validation_dataset.shape[0], error_rate * 100))
 
 
 def load_data(filename):
