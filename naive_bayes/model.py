@@ -63,13 +63,13 @@ class NaiveBayesModel:
 
 
     def save(self):
-        with open("model.dmp", "wb") as fw:
+        with open("data/model.dmp", "wb") as fw:
             pickle.dump(self, fw)
 
 
     @staticmethod
     def load():
-        with open("model.dmp", "rb") as fr:
+        with open("data/model.dmp", "rb") as fr:
             return pickle.load(fr)
 
 
